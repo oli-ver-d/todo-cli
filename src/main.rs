@@ -10,7 +10,12 @@ use std::io::BufReader;
 use std::io::Write;
 use std::path::PathBuf;
 
+mod app;
+mod tui;
+mod ui;
+
 const TODO_FILE_NAME: &str = ".todo";
+const DATE_TIME_FORMAT: &str = "%m-%d %H:%M";
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -28,6 +33,9 @@ enum Commands {
     List,
     /// Remove a todo list item
     Remove { index: usize },
+    /// Enter interactive move
+    #[command(alias = "i")]
+    Interactive,
 }
 
 struct TodoItem {
@@ -99,7 +107,7 @@ fn main() {
             println!(
                 "Added: {}\n{}",
                 desc,
-                new_item.timestamp.format("%Y-%m-%d %H:%M")
+                new_item.timestamp.format(DATE_TIME_FORMAT)
             );
         }
         Commands::List => {
@@ -111,7 +119,7 @@ fn main() {
                     println!(
                         "{}. [{}] {}",
                         i + 1,
-                        todo.timestamp.format("%Y-%m-%d %H:%M"),
+                        todo.timestamp.format(DATE_TIME_FORMAT),
                         todo.description
                     );
                 }
@@ -126,6 +134,9 @@ fn main() {
                 write_todos(&todos);
                 println!("Removed: {}", removed.description);
             }
+        }
+        Commands::Interactive => {
+            let _ = tui::interactive_mode();
         }
     }
 }
