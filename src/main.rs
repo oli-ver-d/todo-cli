@@ -15,7 +15,7 @@ mod tui;
 mod ui;
 
 const TODO_FILE_NAME: &str = ".todo";
-const DATE_TIME_FORMAT: &str = "%m-%d %H:%M";
+const DATE_TIME_FORMAT: &str = "%d-%m %H:%M";
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
